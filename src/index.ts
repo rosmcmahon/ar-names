@@ -1,4 +1,4 @@
 import { NamesCache } from './NamesCache'
-import { Account } from './types'
+export { Account } from './types'
 
-export const GQL_URL = 'https://arweave.net/graphql'
+export const Names = NamesCache

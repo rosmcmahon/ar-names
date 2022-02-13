@@ -2,7 +2,8 @@ import axios from 'axios'
 import { Account, Accounts } from './types'
 import v1names from './v1names/v1transformed'
 import * as gql from 'ar-gql'
-import { GQL_URL } from '.'
+import { GQL_URL } from './constants'
+import { dim, red } from 'ansicolor'
 
 const getHeight = async()=> {
 	const query = "query($minBlock: Int){ blocks( height: { min: $minBlock } first: 1 sort: HEIGHT_DESC ){ edges { node {height}}}}"
@@ -42,7 +43,7 @@ export class NamesCache {
 	private async update(){
 		/* initial load of v1 names */
 		if(!this.takenNames){
-			console.log('arweave-id: loading previous v1 names')
+			console.log(dim('arweave-id: loading previous v1 names'))
 			this.accounts = v1names
 			this.takenNames = new Set()
 			for (const key in this.accounts) {
@@ -54,7 +55,7 @@ export class NamesCache {
 		const height = await getHeight() 
 
 		if(height > this.lastHeight){
-			console.log('arweave-id: updating NamesCache')
+			console.log(dim('arweave-id: updating NamesCache'))
 			
 			this.lastHeight = height
 			//update v2 txs in order
@@ -69,8 +70,8 @@ export class NamesCache {
 			const numTakenNames = this.takenNames.size
 
 			if(process.env.NODE_ENV === 'test'){
-				console.log('number of accounts', numAccounts)
-				console.log('takenNames.size',numTakenNames)
+				console.log(dim('number of accounts' + numAccounts))
+				console.log(dim('takenNames.size ' + numTakenNames))
 			}
 
 			if(numAccounts !== numTakenNames){
@@ -90,7 +91,7 @@ export class NamesCache {
 
 		if(this.takenNames.has(name)){
 			if(!this.accounts[address] || this.accounts[address].name !== name ){
-				console.log(`arweave-id: ${address} bad record. Name '${name}' is taken aleady.`)
+				console.log(red(`arweave-id: ${address} bad record. Name '${name}' is taken aleady.`))
 				return false;
 			}else{
 				this.accounts[address] = Object.assign(this.accounts[address], account)
@@ -101,7 +102,7 @@ export class NamesCache {
 				this.accounts[address] = account
 			}else{
 				const oldName =this.accounts[address].name
-				if(process.env.NODE_ENV === 'test') console.log('freeing name', oldName)
+				if(process.env.NODE_ENV === 'test') console.log(dim('freeing name' + oldName))
 				this.takenNames.delete(oldName)
 				this.accounts[address] = Object.assign(this.accounts[address], account)
 			}
@@ -152,7 +153,7 @@ const queryV2Records = async(minBlock: number, maxBlock: number)=> {
 	const records: Record[] = []
 
 	if(process.env.NODE_ENV === 'test'){
-		console.log('total results', results.length)
+		console.log(dim('total results ' + results.length))
 	}
 
 	for (const result of results) {
@@ -179,18 +180,18 @@ const queryV2Records = async(minBlock: number, maxBlock: number)=> {
 					atomicAvatar = result.node.id
 				}
 			}
-			if(tag.name === 'Avatar') record.account.avatar = tag.value
+			if(tag.name === 'Avatar') record.account.avatarTxid = tag.value
 			if(tag.name === 'App-Name' && tag.value === 'arweave-id') sanity1 = true
 			if(tag.name === 'App-Version' && tag.value === '0.0.2') sanity2 = true
 		}
-		if(atomicAvatar) record.account.avatar = atomicAvatar
-		/* graphql v1 started to return crazy results */
+		if(atomicAvatar) record.account.avatarTxid = atomicAvatar
+		/* graphql v1 started to return crazy results, same might happen again */
 		if(!sanity1 || !sanity2){
 			throw new Error(`arweave-id: GQL is returning nonsense results. App-Name: !arweave-id, App-Version: !0.0.2`)
 		}
 		/* normal error checking */
 		if(!record.account.name){
-			console.log('arweave-id: bad record. no Name for', record.address)
+			console.log(red('arweave-id: bad record. no Name for ' + record.address))
 			continue;
 		}
 		records.push(record)
