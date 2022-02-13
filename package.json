@@ -12,7 +12,7 @@
     "example": "ts-node examples/example1.ts",
     "clean": "rimraf build",
     "build": "npm run clean && tsc",
-    "preversion": "npm run build && git commit -m \"auto: dist\" -- ./dist",
+    "preversion": "npm run build && git commit -m \"auto: build\" -- ./build",
     "postversion": "git push && git push --tags && npm publish"
   },
   "engines": {
