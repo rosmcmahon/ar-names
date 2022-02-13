@@ -1,4 +1,4 @@
-import { NamesCache } from './NamesCache'
+export { NamesCache } from './NamesCache'
 export { Account } from './types'
+export { getIdenticon } from './identicon'
 
-export const Names = NamesCache
