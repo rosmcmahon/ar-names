@@ -10,7 +10,8 @@
     "test:cache": "mocha -r ts-node/register **/NamesCache.spec.ts",
     "test:set": "mocha -r ts-node/register **/set-tx.spec.ts",
     "example": "ts-node examples/example1.ts",
-    "build": "tsc",
+    "clean": "rimraf build",
+    "build": "npm run clean && tsc",
     "preversion": "npm run build && git commit -m \"auto: dist\" -- ./dist",
     "postversion": "git push && git push --tags && npm publish"
   },
@@ -45,6 +46,7 @@
     "arweave": "^1.10.23",
     "chai": "^4.3.6",
     "mocha": "^9.2.0",
+    "rimraf": "^3.0.2",
     "sinon": "^13.0.1",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.5"

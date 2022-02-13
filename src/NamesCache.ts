@@ -70,8 +70,8 @@ export class NamesCache {
 			const numTakenNames = this.takenNames.size
 
 			if(process.env.NODE_ENV === 'test'){
-				logdim('number of accounts' + numAccounts)
-				logdim('takenNames.size ' + numTakenNames)
+				logdim('number of accounts', numAccounts)
+				logdim('takenNames.size', numTakenNames)
 			}
 
 			if(numAccounts !== numTakenNames){
