@@ -1,7 +1,7 @@
 {
-  "name": "ar-id",
+  "name": "ar-names",
   "version": "2.0.0",
-  "description": "arID. arweaveID only better.",
+  "description": "ar-names. arweaveID only better.",
   "main": "./build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
