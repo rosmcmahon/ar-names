@@ -9,6 +9,7 @@
     "test:grep": "mocha -r ts-node/register **/*.spec.ts --grep",
     "test:cache": "mocha -r ts-node/register **/NamesCache.spec.ts",
     "test:set": "mocha -r ts-node/register **/set-tx.spec.ts",
+    "example": "ts-node examples/example1.ts",
     "build": "tsc",
     "preversion": "npm run build && git commit -m \"auto: dist\" -- ./dist",
     "postversion": "git push && git push --tags && npm publish"

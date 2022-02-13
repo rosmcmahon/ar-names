@@ -3,7 +3,7 @@ import { Account, Accounts } from './types'
 import v1names from './v1names/v1transformed'
 import * as gql from 'ar-gql'
 import { GQL_URL } from './constants'
-import { dim, red } from 'ansicolor'
+import { logdim, logred } from './utils/log'
 
 const getHeight = async()=> {
 	const query = "query($minBlock: Int){ blocks( height: { min: $minBlock } first: 1 sort: HEIGHT_DESC ){ edges { node {height}}}}"
@@ -43,7 +43,7 @@ export class NamesCache {
 	private async update(){
 		/* initial load of v1 names */
 		if(!this.takenNames){
-			console.log(dim('arweave-id: loading previous v1 names'))
+			logdim('arweave-id: loading previous v1 names')
 			this.accounts = v1names
 			this.takenNames = new Set()
 			for (const key in this.accounts) {
@@ -55,7 +55,7 @@ export class NamesCache {
 		const height = await getHeight() 
 
 		if(height > this.lastHeight){
-			console.log(dim('arweave-id: updating NamesCache'))
+			logdim('arweave-id: updating NamesCache')
 			
 			this.lastHeight = height
 			//update v2 txs in order
@@ -70,8 +70,8 @@ export class NamesCache {
 			const numTakenNames = this.takenNames.size
 
 			if(process.env.NODE_ENV === 'test'){
-				console.log(dim('number of accounts' + numAccounts))
-				console.log(dim('takenNames.size ' + numTakenNames))
+				logdim('number of accounts' + numAccounts)
+				logdim('takenNames.size ' + numTakenNames)
 			}
 
 			if(numAccounts !== numTakenNames){
@@ -91,7 +91,7 @@ export class NamesCache {
 
 		if(this.takenNames.has(name)){
 			if(!this.accounts[address] || this.accounts[address].name !== name ){
-				console.log(red(`arweave-id: ${address} bad record. Name '${name}' is taken aleady.`))
+				logred(`arweave-id: ${address} bad record. Name '${name}' is taken aleady.`)
 				return false;
 			}else{
 				this.accounts[address] = Object.assign(this.accounts[address], account)
@@ -102,7 +102,7 @@ export class NamesCache {
 				this.accounts[address] = account
 			}else{
 				const oldName =this.accounts[address].name
-				if(process.env.NODE_ENV === 'test') console.log(dim('freeing name' + oldName))
+				if(process.env.NODE_ENV === 'test') logdim('freeing name' + oldName)
 				this.takenNames.delete(oldName)
 				this.accounts[address] = Object.assign(this.accounts[address], account)
 			}
@@ -153,7 +153,7 @@ const queryV2Records = async(minBlock: number, maxBlock: number)=> {
 	const records: Record[] = []
 
 	if(process.env.NODE_ENV === 'test'){
-		console.log(dim('total results ' + results.length))
+		logdim('total results', results.length)
 	}
 
 	for (const result of results) {
@@ -191,7 +191,7 @@ const queryV2Records = async(minBlock: number, maxBlock: number)=> {
 		}
 		/* normal error checking */
 		if(!record.account.name){
-			console.log(red('arweave-id: bad record. no Name for ' + record.address))
+			logred('arweave-id: bad record. no Name for', record.address)
 			continue;
 		}
 		records.push(record)

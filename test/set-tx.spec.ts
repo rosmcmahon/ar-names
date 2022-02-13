@@ -1,6 +1,6 @@
 process.env.NODE_ENV = 'test'
 import { expect } from 'chai'
-import col from 'ansi-colors'
+import { dim } from 'ansicolor'
 import Arlocal from 'arlocal'
 import { set } from '../src/set-tx'
 import { Account } from '../src/types'
@@ -24,8 +24,8 @@ describe('set-tx tests', ()=>{
 		await arlocal.start()
 		const address = await arweave.wallets.getAddress(jwk)
 		arlocal.getWalletDb().addWallet({ address, balance: 10000000000000})
-		console.log('test address:', address)
-		console.log('test balance:', arweave.ar.winstonToAr(await arweave.wallets.getBalance(address)))
+		console.log(dim(`test address: ${address}`)) 
+		console.log(dim(`test balance: ${arweave.ar.winstonToAr(await arweave.wallets.getBalance(address))}`))
 		timer = setInterval(()=>mine(), 2000)
 	})
 
@@ -34,7 +34,7 @@ describe('set-tx tests', ()=>{
 			name: 'anything',
 		}
 		const res = await set({ account, jwk, arweave })
-		console.log('txid:', res)
+		console.log(dim(`txid: ${res}`))
 		expect(res).not.false
 		expect(res).is.a('string')
 	}).timeout(0)
@@ -45,7 +45,7 @@ describe('set-tx tests', ()=>{
 			name: 'anything',
 		}
 		const res = await set({ account, pic, jwk, arweave })
-		console.log('txid:', res)
+		console.log(dim(`txid: ${res}`))
 		expect(res).not.false
 		expect(res).is.a('string')
 	}).timeout(0)
