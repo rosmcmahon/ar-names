@@ -50,7 +50,7 @@ export const set = async(options: SetOptions)=> {
 	if(account.url) tx.addTag('Url', account.url)
 	if(account.text) tx.addTag('Text', account.text)
 	if(!mime){
-		if(account.avatar) tx.addTag('Avatar', account.avatar)
+		if(account.avatarTxid) tx.addTag('Avatar', account.avatarTxid)
 	}else{
 		tx.addTag('Content-Type', mime)
 	}
@@ -70,7 +70,7 @@ export const set = async(options: SetOptions)=> {
 	//update local cache
 	if(mime){
 		let ac = options.account
-		ac.avatar = tx.id
+		ac.avatarTxid = tx.id
 		await names.set(address, ac)
 	}
 	return tx.id

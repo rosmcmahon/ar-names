@@ -1,7 +1,7 @@
 
 export interface Account {
 	name: string
-	avatar?: string
+	avatarTxid?: string
 	text?: string
 	url?: string
 }

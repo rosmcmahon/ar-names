@@ -9,7 +9,7 @@ describe('NamesCache tests', ()=> {
 		// should throw error if something wrong
 		try {
 			const names = await NamesCache.getInstance()
-			expect(true).true			
+			expect(true).true
 		} catch (e) {
 			console.log(col.red(e.message))
 			expect(e.message).false
