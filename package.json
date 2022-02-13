@@ -1,5 +1,5 @@
 {
-  "name": "arid",
+  "name": "ar-id",
   "version": "1.0.0",
   "description": "arID. arweaveID only better.",
   "main": "./build/index.js",
