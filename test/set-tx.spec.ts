@@ -46,8 +46,15 @@ describe('set-tx tests', ()=>{
 		}
 		const res = await set({ account, pic, jwk, arweave })
 		console.log(dim(`txid: ${res}`))
+
 		expect(res).not.false
 		expect(res).is.a('string')
+
+		if(typeof res === 'string'){ 
+			const getdata = await arweave.api.get('/'+res)
+			expect(getdata.data).to.exist
+			expect(getdata.data.length).eq(45455)
+		}
 	}).timeout(0)
 
 	afterEach(()=> sinon.restore()) 
