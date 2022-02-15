@@ -1,4 +1,4 @@
-import { NamesCache } from '../src' //or 'arid'
+import { NamesCache } from '../src' //or 'ar-names'
 
 const main = async()=> {
 	// this should probably be called on page load to cache names in advance
