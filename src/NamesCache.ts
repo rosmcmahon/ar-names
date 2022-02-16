@@ -126,12 +126,14 @@ interface Record {
 }
 
 const queryV2Records = async(minBlock: number, maxBlock: number)=> {
+	/* actually, this handles both v2 and v3 records. v3 have a new Avatar tag containing a txid. this allows compatiblility with previous data, and also stops the waseful practise of reuploading the image data for each change to the account.*/
+	
 	const query = `
 	query($cursor: String, $minBlock: Int, $maxBlock: Int){
 		transactions(
 			tags: [
 				{name: "App-Name", values: ["arweave-id"]},
-				{name: "App-Version", values: ["0.0.2"]}
+				{name: "App-Version", values: ["0.0.2", "0.0.3"]}
 			]
 			block: { min: $minBlock, max: $maxBlock}
 			first: 100
@@ -182,16 +184,21 @@ const queryV2Records = async(minBlock: number, maxBlock: number)=> {
 			}
 			if(tag.name === 'Avatar') record.account.avatarTxid = tag.value
 			if(tag.name === 'App-Name' && tag.value === 'arweave-id') sanity1 = true
-			if(tag.name === 'App-Version' && tag.value === '0.0.2') sanity2 = true
+			if(tag.name === 'App-Version' && ['0.0.2', '0.0.3'].includes(tag.value)) sanity2 = true
 		}
 		if(atomicAvatar) record.account.avatarTxid = atomicAvatar
+		/* strip dataItems, too easy to spam */
+		if(result.node.parent){
+			logred(`ar-names: dataItems are currently not supported, as with Smartweave`)
+			continue;
+		}
 		/* graphql v1 started to return crazy results, same might happen again */
 		if(!sanity1 || !sanity2){
-			throw new Error(`arweave-id: GQL is returning nonsense results. App-Name: !arweave-id, App-Version: !0.0.2`)
+			throw new Error(`ar-names: GQL is returning nonsense results. App-Name: !arweave-id, App-Version: !0.0.2`)
 		}
 		/* normal error checking */
 		if(!record.account.name){
-			logred('arweave-id: bad record. no Name for', record.address)
+			logred('ar-names: bad record. no Name for', record.address)
 			continue;
 		}
 		records.push(record)

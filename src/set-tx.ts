@@ -4,16 +4,8 @@ import { Account } from "./types";
 import { NamesCache } from './NamesCache'
 import filetype from 'file-type'
 
+
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
-
-
-// const arConfig = 
-// 	(typeof window !== "undefined" && window.location && window.location.hostname)
-// 	? {}
-// 	: (process.env.NODE_ENV==='test') 
-// 		? {host: 'localhost', protocol: 'http', port: 1984} 
-// 		: {host: 'arweave.net', protocol: 'https', port: 443} 
-
 
 export interface SetOptions {
 	account: Account
@@ -44,6 +36,9 @@ export const set = async(options: SetOptions)=> {
 		target: 'v2XXwq_FvVqH2KR4p_x8H-SQ7rDwZBbykSv-59__Avc',
 		quantity: '1',
 	}, options.jwk )
+
+	tx.addTag('App-Name', 'arweave-id')
+	tx.addTag('App-Version', '0.0.3')
 
 	const account = options.account
 	tx.addTag('Name', account.name)
