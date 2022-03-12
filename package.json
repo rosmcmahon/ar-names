@@ -1,6 +1,6 @@
 {
   "name": "ar-names",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "ar-names. arweaveID only better.",
   "main": "./build/index.js",
   "types": "build/index.d.ts",
