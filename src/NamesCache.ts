@@ -4,6 +4,7 @@ import v1names from './v1names/v1transformed'
 import * as gql from 'ar-gql'
 import { GQL_URL } from './constants'
 import { logdim, logred } from './utils/log'
+import { set as importedSet } from './set-tx'
 
 const getHeight = async()=> {
 	const query = "query($minBlock: Int){ blocks( height: { min: $minBlock } first: 1 sort: HEIGHT_DESC ){ edges { node {height}}}}"
@@ -80,10 +81,12 @@ export class NamesCache {
 		}
 	}
 
-	public set = async(address: string, account: Account)=> {
+	public _internal_set_ = async(address: string, account: Account)=> {
 		await this.update()
 		return this.add(address, account)
 	}
+
+	public set = importedSet
 
 	private add = async(address: string, account: Account) => {
 		const name = account.name
@@ -126,7 +129,7 @@ interface Record {
 }
 
 const queryV2Records = async(minBlock: number, maxBlock: number)=> {
-	/* actually, this handles both v2 and v3 records. v3 have a new Avatar tag containing a txid. this allows compatiblility with previous data, and also stops the waseful practise of reuploading the image data for each change to the account.*/
+	/* actually, this handles both v2 and v3 records. v3 have a new Avatar tag containing a txid. this allows compatiblility with previous data, and also stops the wasteful practise of reuploading the image data for each change to the account. */
 	
 	const query = `
 	query($cursor: String, $minBlock: Int, $maxBlock: Int){

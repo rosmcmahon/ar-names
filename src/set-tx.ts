@@ -17,7 +17,7 @@ export const set = async(options: SetOptions)=> {
 	const arweave = options.arweave
 	const address = await arweave.wallets.jwkToAddress(options.jwk)
 	const names = await NamesCache.getInstance()
-	const result = await names.set(address, options.account)
+	const result = await names._internal_set_(address, options.account)
 
 	if(result === false) return false;
 
@@ -66,7 +66,7 @@ export const set = async(options: SetOptions)=> {
 	if(mime){
 		let ac = options.account
 		ac.avatarTxid = tx.id
-		await names.set(address, ac)
+		await names._internal_set_(address, ac)
 	}
 	return tx.id
 }

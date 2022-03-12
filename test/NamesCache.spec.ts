@@ -23,7 +23,7 @@ describe('NamesCache tests', ()=> {
 
 	it('tests new a valid account', async()=>{
 		const names = await NamesCache.getInstance()
-		const res = await names.set('fake-wallet-string_012345678901234567890123', {
+		const res = await names._internal_set_('fake-wallet-string_012345678901234567890123', {
 			name: 'Not A Real Name 202109042228'
 		})
 		expect(res).true
@@ -33,7 +33,7 @@ describe('NamesCache tests', ()=> {
 	
 	it('tests new account with an invalid name', async()=>{
 		const names = await NamesCache.getInstance()
-		const res = await names.set('fake-wallet-string_012345678901234567890123', {
+		const res = await names._internal_set_('fake-wallet-string_012345678901234567890123', {
 			name: 'Testy Mc Testface'
 			//in permanent use by aoaJNC8NcKVfgwaUj6kyJi2hKrVGUsRHCGf8RhKnsic
 		})
@@ -42,7 +42,7 @@ describe('NamesCache tests', ()=> {
 
 	it('tests updating to an invalid name', async()=>{
 		const names = await NamesCache.getInstance()
-		const res = await names.set('v2XXwq_FvVqH2KR4p_x8H-SQ7rDwZBbykSv-59__Avc', {
+		const res = await names._internal_set_('v2XXwq_FvVqH2KR4p_x8H-SQ7rDwZBbykSv-59__Avc', {
 			name: 'Testy Mc Testface',
 			//in permanent use by aoaJNC8NcKVfgwaUj6kyJi2hKrVGUsRHCGf8RhKnsic
 		})
@@ -51,7 +51,7 @@ describe('NamesCache tests', ()=> {
 	
 	it('tests updating account text', async()=>{
 		const names = await NamesCache.getInstance()
-		const res = await names.set('aoaJNC8NcKVfgwaUj6kyJi2hKrVGUsRHCGf8RhKnsic', {
+		const res = await names._internal_set_('aoaJNC8NcKVfgwaUj6kyJi2hKrVGUsRHCGf8RhKnsic', {
 			name: 'Testy Mc Testface',
 			//in permanent use by aoaJNC8NcKVfgwaUj6kyJi2hKrVGUsRHCGf8RhKnsic
 			text: 'i love text'
@@ -61,12 +61,12 @@ describe('NamesCache tests', ()=> {
 	
 	it('tests updating account name (freeing)', async()=>{
 		const names = await NamesCache.getInstance()
-		const res = await names.set('aoaJNC8NcKVfgwaUj6kyJi2hKrVGUsRHCGf8RhKnsic', {
+		const res = await names._internal_set_('aoaJNC8NcKVfgwaUj6kyJi2hKrVGUsRHCGf8RhKnsic', {
 			name: 'Some Different Name',
 		})
 		expect(res).true
 		//set this back so other tests don't fail
-		expect(await names.set('aoaJNC8NcKVfgwaUj6kyJi2hKrVGUsRHCGf8RhKnsic', {
+		expect(await names._internal_set_('aoaJNC8NcKVfgwaUj6kyJi2hKrVGUsRHCGf8RhKnsic', {
 			name: 'Testy Mc Testface'
 		})).true
 	}).timeout(0)
