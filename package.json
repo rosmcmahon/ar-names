@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rosmcmahon/arid.git"
+    "url": "git+https://github.com/rosmcmahon/ar-names.git"
   },
   "keywords": [
     "arweave",
@@ -35,9 +35,9 @@
   ],
   "license": "LGPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/rosmcmahon/arid/issues"
+    "url": "https://github.com/rosmcmahon/ar-names/issues"
   },
-  "homepage": "https://github.com/rosmcmahon/arid#readme",
+  "homepage": "https://github.com/rosmcmahon/ar-names#readme",
   "devDependencies": {
     "@types/chai": "^4.3.0",
     "@types/mocha": "^9.1.0",
